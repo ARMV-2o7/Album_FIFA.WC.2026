@@ -246,15 +246,7 @@ const TEAMS = [
     {id:"BEL16",name:"Jérémy Doku"},{id:"BEL17",name:"Charles De Ketelaere"},{id:"BEL18",name:"Leandro Trossard"},
     {id:"BEL19",name:"Loïs Openda"},{id:"BEL20",name:"Romelu Lukaku"},
   ]},
-  { id:"ITA", name:"Itália", color:"#009246", stickers:[
-    {id:"ITA1",name:"Escudo Itália",foil:true},{id:"ITA2",name:"Gianluigi Donnarumma"},{id:"ITA3",name:"Alex Meret"},
-    {id:"ITA4",name:"Alessandro Bastoni"},{id:"ITA5",name:"Giorgio Scalvini"},{id:"ITA6",name:"Giovanni Di Lorenzo"},
-    {id:"ITA7",name:"Federico Dimarco"},{id:"ITA8",name:"Bryan Cristante"},{id:"ITA9",name:"Sandro Tonali"},
-    {id:"ITA10",name:"Nicolo Barella"},{id:"ITA11",name:"Jorginho"},{id:"ITA12",name:"Lorenzo Pellegrini"},
-    {id:"ITA13",name:"Foto Oficial Itália"},{id:"ITA14",name:"Federico Chiesa"},{id:"ITA15",name:"Giacomo Raspadori"},
-    {id:"ITA16",name:"Davide Frattesi"},{id:"ITA17",name:"Mateo Retegui"},{id:"ITA18",name:"Mattia Zaccagni"},
-    {id:"ITA19",name:"Lorenzo Lucca"},{id:"ITA20",name:"Moise Kean"},
-  ]},
+
   { id:"COL", name:"Colômbia", color:"#FCD116", stickers:[
     {id:"COL1",name:"Escudo Colômbia",foil:true},{id:"COL2",name:"Camilo Vargas"},{id:"COL3",name:"David Ospina"},
     {id:"COL4",name:"Davinson Sanchez"},{id:"COL5",name:"Yerry Mina"},{id:"COL6",name:"Daniel Muñoz"},
@@ -356,7 +348,7 @@ const TEAMS = [
   ]},
   { id:"CUW", name:"Curaçao", color:"#002B7F", stickers:[
     {id:"CUW1",name:"Escudo Curaçao",foil:true},{id:"CUW2",name:"Eloy Room"},{id:"CUW3",name:"Armando Obispo"},
-    {id:"CUW4",name:"Sherel Floranus"},{id:"CUW5",name:"Jurriën Gaari"},{id:"CUW6",name:"Jurien Gaari"},
+    {id:"CUW4",name:"Sherel Floranus"},{id:"CUW5",name:"Jurriën Gaari"},{id:"CUW6",name:"Joshua Brenet"},
     {id:"CUW7",name:"Roshon van Eijma"},{id:"CUW8",name:"Shurandy Sambo"},{id:"CUW9",name:"Livano Comenencia"},
     {id:"CUW10",name:"Godfried Roemeratoe"},{id:"CUW11",name:"Juninho Bacuna"},{id:"CUW12",name:"Leandro Bacuna"},
     {id:"CUW13",name:"Foto Oficial Curaçao"},{id:"CUW14",name:"Tahith Chong"},{id:"CUW15",name:"Kenji Gorre"},
@@ -383,9 +375,9 @@ const TEAMS = [
   ]},
   { id:"SWE", name:"Suécia", color:"#006AA7", stickers:[
     {id:"SWE1",name:"Escudo Suécia",foil:true},{id:"SWE2",name:"Viktor Johansson"},{id:"SWE3",name:"Isak Hien"},
-    {id:"SWE4",name:"Gabriel Gudmundsson"},{id:"SWE5",name:"Emil Holm"},{id:"SWE6",name:"Eric Nilsson"},
+    {id:"SWE4",name:"Gabriel Gudmundsson"},{id:"SWE5",name:"Emil Holm"},{id:"SWE6",name:"Victor Nilsson Lindelof"},
     {id:"SWE7",name:"Gustaf Lagerbielke"},{id:"SWE8",name:"Lucas Bergvall"},{id:"SWE9",name:"Hugo Larsson"},
-    {id:"SWE10",name:"Yasin Ayari"},{id:"SWE11",name:"Mattias Svanberg"},{id:"SWE12",name:"Robin Olsen"},
+    {id:"SWE10",name:"Jesper Karlstrom"},{id:"SWE11",name:"Mattias Svanberg"},{id:"SWE12",name:"Robin Olsen"},
     {id:"SWE13",name:"Foto Oficial Suécia"},{id:"SWE14",name:"Daniel Svensson"},{id:"SWE15",name:"Ken Sema"},
     {id:"SWE16",name:"Roony Bardghji"},{id:"SWE17",name:"Dejan Kulusevski"},{id:"SWE18",name:"Anthony Elanga"},
     {id:"SWE19",name:"Alexander Isak"},{id:"SWE20",name:"Viktor Gyokeres"},
@@ -393,7 +385,7 @@ const TEAMS = [
   { id:"TUN", name:"Tunísia", color:"#E70013", stickers:[
     {id:"TUN1",name:"Escudo Tunísia",foil:true},{id:"TUN2",name:"Bechir Ben Saïd"},{id:"TUN3",name:"Aymen Dahmen"},
     {id:"TUN4",name:"Yan Valery"},{id:"TUN5",name:"Montassar Talbi"},{id:"TUN6",name:"Yassine Meriah"},
-    {id:"TUN7",name:"Ali Abdi"},{id:"TUN8",name:"Anis Ben Slimane"},{id:"TUN9",name:"Ellyes Skhiri"},
+    {id:"TUN7",name:"Ali Abdi"},{id:"TUN8",name:"Dylan Bronn"},{id:"TUN9",name:"Ellyes Skhiri"},
     {id:"TUN10",name:"Aïssa Laïdouni"},{id:"TUN11",name:"Ferjani Sassi"},{id:"TUN12",name:"Mohamed Ali Ben Romdhane"},
     {id:"TUN13",name:"Foto Oficial Tunísia"},{id:"TUN14",name:"Hannibal Mejbri"},{id:"TUN15",name:"Elias Achouri"},
     {id:"TUN16",name:"Elias Saad"},{id:"TUN17",name:"Hazem Mastouri"},{id:"TUN18",name:"Ismaël Gharbi"},
@@ -429,7 +421,7 @@ const TEAMS = [
   { id:"UZB", name:"Uzbequistão", color:"#1EB53A", stickers:[
     {id:"UZB1",name:"Escudo Uzbequistão",foil:true},{id:"UZB2",name:"Utkir Yusupov"},{id:"UZB3",name:"Farrukh Sayfiev"},
     {id:"UZB4",name:"Sherzod Nasrullaev"},{id:"UZB5",name:"Umar Eshmurodov"},{id:"UZB6",name:"Husniddin Aliqulov"},
-    {id:"UZB7",name:"Rustam Ashurmatov"},{id:"UZB8",name:"Akber Ismatullaev"},{id:"UZB9",name:"Abdukodir Khusanov"},
+    {id:"UZB7",name:"Rustam Ashurmatov"},{id:"UZB8",name:"Khojiakbar Alijonov"},{id:"UZB9",name:"Abdukodir Khusanov"},
     {id:"UZB10",name:"Odiljon Hamrobekov"},{id:"UZB11",name:"Otabek Shukurov"},{id:"UZB12",name:"Jamshid Iskanderov"},
     {id:"UZB13",name:"Foto Oficial Uzbequistão"},{id:"UZB14",name:"Azbek Turgunboev"},{id:"UZB15",name:"Khojimat Erkinov"},
     {id:"UZB16",name:"Eldor Shomurodov"},{id:"UZB17",name:"Oston Urunov"},{id:"UZB18",name:"Jaloliddin Masharipov"},
@@ -472,13 +464,13 @@ const TEAMS = [
     {id:"PAN19",name:"Jose Luis Rodriguez"},{id:"PAN20",name:"Alberto Quintero"},
   ]},
   { id:"CC", name:"Coca-Cola", color:"#F40009", stickers:[
-    {id:"CC1",name:"Lamine Yamal",foil:true},{id:"CC2",name:"Joshua Kimmich",foil:true},
-    {id:"CC3",name:"Harry Kane",foil:true},{id:"CC4",name:"Santiago Giménez",foil:true},
-    {id:"CC5",name:"Joško Gvardiol",foil:true},{id:"CC6",name:"Federico Valverde",foil:true},
-    {id:"CC7",name:"Jefferson Lerma",foil:true},{id:"CC8",name:"Enner Valencia",foil:true},
-    {id:"CC9",name:"Gabriel Magalhães",foil:true},{id:"CC10",name:"Virgil van Dijk",foil:true},
-    {id:"CC11",name:"Alphonso Davies",foil:true},{id:"CC12",name:"Emiliano Martínez",foil:true},
-    {id:"CC13",name:"Raúl Jiménez",foil:true},{id:"CC14",name:"Lautaro Martínez",foil:true},
+    {id:"CC1",name:"Lamine Yamal"},{id:"CC2",name:"Joshua Kimmich"},
+    {id:"CC3",name:"Harry Kane"},{id:"CC4",name:"Santiago Giménez"},
+    {id:"CC5",name:"Joško Gvardiol"},{id:"CC6",name:"Federico Valverde"},
+    {id:"CC7",name:"Jefferson Lerma"},{id:"CC8",name:"Enner Valencia"},
+    {id:"CC9",name:"Gabriel Magalhães"},{id:"CC10",name:"Virgil van Dijk"},
+    {id:"CC11",name:"Alphonso Davies"},{id:"CC12",name:"Emiliano Martínez"},
+    {id:"CC13",name:"Raúl Jiménez"},{id:"CC14",name:"Lautaro Martínez"},
   ]},
 ];
 
@@ -515,15 +507,18 @@ const FLAG = {
   FWC:"",MEX:"mx",RSA:"za",KOR:"kr",CZE:"cz",CAN:"ca",BIH:"ba",QAT:"qa",
   SUI:"ch",BRA:"br",MAR:"ma",HAI:"ht",SCO:"gb-sct",USA:"us",PAR:"py",AUS:"au",
   TUR:"tr",ARG:"ar",ESP:"es",FRA:"fr",GER:"de",POR:"pt",ENG:"gb-eng",NED:"nl",
-  BEL:"be",ITA:"it",COL:"co",URU:"uy",CRO:"hr",SEN:"sn",JPN:"jp",ECU:"ec",
+  BEL:"be",COL:"co",URU:"uy",CRO:"hr",SEN:"sn",JPN:"jp",ECU:"ec",
   ALG:"dz",EGY:"eg",GHA:"gh",CPV:"cv",COD:"cd",CUW:"cw",CIV:"ci",AUT:"at",
   SWE:"se",TUN:"tn",IRN:"ir",NZL:"nz",KSA:"sa",UZB:"uz",JOR:"jo",IRQ:"iq",
   NOR:"no",PAN:"pa",CC:"",LEG:"",
 };
 
+const SCO_FLAG = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Flag_of_Scotland.svg/40px-Flag_of_Scotland.svg.png";
+
 const FlagImg = ({ code, size=32 }) => {
   if (!code) return <span style={{fontSize:size*0.8,lineHeight:1}}>🏆</span>;
-  const upper = code.replace("gb-sct","GB").replace("gb-eng","GB").toUpperCase();
+  if (code === "gb-sct") return <img src={SCO_FLAG} width={size*1.4} height={size} style={{objectFit:"contain",borderRadius:3}} alt="Scotland" />;
+  const upper = code.replace("gb-eng","GB").toUpperCase();
   return <img src={`https://flagsapi.com/${upper}/flat/64.png`} width={size*1.4} height={size}
     style={{objectFit:"contain",borderRadius:3}} alt={upper}
     onError={e=>{e.target.style.display="none"}} />;
@@ -558,9 +553,7 @@ export default function App() {
     persist(next);
   };
 
-  const totalGlued = Object.keys(state.glued).length;
   const totalRepeats = Object.values(state.repeats).reduce((a,b)=>a+b,0);
-  // Contador % só usa TEAMS (não LEGENDS)
   const teamGlued = TEAMS.reduce((acc,t) => acc + t.stickers.filter(s=>state.glued[s.id]).length, 0);
   const totalMissing = TOTAL - teamGlued;
   const pct = Math.round((teamGlued/TOTAL)*100);
