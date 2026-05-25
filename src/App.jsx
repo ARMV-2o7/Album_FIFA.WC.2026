@@ -463,10 +463,34 @@ const TEAMS = [
 
 const TOTAL = TEAMS.reduce((acc, t) => acc + t.stickers.length, 0);
 
+// Mapa de códigos ISO2 para bandeiras (via flagcdn.com)
+const FLAG = {
+  FWC:"", MEX:"mx", RSA:"za", KOR:"kr", CZE:"cz", CAN:"ca", BIH:"ba", QAT:"qa",
+  SUI:"ch", BRA:"br", MAR:"ma", HAI:"ht", SCO:"gb-sct", USA:"us", PAR:"py", AUS:"au",
+  TUR:"tr", ARG:"ar", ESP:"es", FRA:"fr", GER:"de", POR:"pt", ENG:"gb-eng", NED:"nl",
+  BEL:"be", ITA:"it", COL:"co", URU:"uy", CRO:"hr", SEN:"sn", JAP:"jp", MLI:"ml",
+  ECU:"ec", CHI:"cl", ALG:"dz", EGY:"eg", POL:"pl", GHA:"gh", NIG:"ng", PER:"pe",
+  VEN:"ve", CIV:"ci", AUT:"at", CPV:"cv", COD:"cd", CUR:"cw", WCH:"", CC:"",
+};
+
+const FlagImg = ({ code, size = 32 }) => {
+  if (!code) return <span style={{ fontSize: size * 0.7, lineHeight: 1 }}>🏆</span>;
+  return (
+    <img
+      src={`https://flagcdn.com/w${size * 2}/${code}.png`}
+      width={size * 1.4}
+      height={size}
+      style={{ objectFit:"cover", borderRadius:3, border:"1px solid #3a2800" }}
+      alt={code}
+      onError={e => { e.target.style.display = "none"; }}
+    />
+  );
+};
+
 // ─── MAIN APP ─────────────────────────────────────────────────────────────────
 export default function App() {
   const [state, setState] = useState({ glued: {}, repeats: {} });
-  const [view, setView] = useState("album"); // album | missing | repeats | team
+  const [view, setView] = useState("album");
   const [activeTeam, setActiveTeam] = useState(null);
   const [search, setSearch] = useState("");
   const [loaded, setLoaded] = useState(false);
@@ -507,8 +531,8 @@ export default function App() {
   const totalMissing = TOTAL - totalGlued;
   const pct = Math.round((totalGlued / TOTAL) * 100);
 
-  const allMissing = TEAMS.flatMap(t => t.stickers.filter(s => !state.glued[s.id]).map(s => ({ ...s, teamName: t.name, teamFlag: t.flag })));
-  const allRepeats = TEAMS.flatMap(t => t.stickers.filter(s => state.repeats[s.id] > 0).map(s => ({ ...s, teamName: t.name, teamFlag: t.flag, qty: state.repeats[s.id] })));
+  const allMissing = TEAMS.flatMap(t => t.stickers.filter(s => !state.glued[s.id]).map(s => ({ ...s, teamName: t.name, teamId: t.id })));
+  const allRepeats = TEAMS.flatMap(t => t.stickers.filter(s => state.repeats[s.id] > 0).map(s => ({ ...s, teamName: t.name, teamId: t.id, qty: state.repeats[s.id] })));
 
   const filteredTeams = TEAMS.filter(t =>
     t.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -516,85 +540,119 @@ export default function App() {
     t.stickers.some(s => s.id.toLowerCase().includes(search.toLowerCase()) || s.name.toLowerCase().includes(search.toLowerCase()))
   );
 
+  // ── Paleta clara inspirada na capa do álbum
+  const C = {
+    bg: "#f5f5f0",
+    card: "#ffffff",
+    border: "#e0ddd5",
+    accent: "#e8402a",       // vermelho FIFA
+    accentB: "#1a3fa0",      // azul Copa
+    accentG: "#2a9a4a",      // verde
+    gold: "#C9A84C",
+    text: "#1a1a1a",
+    textSub: "#666",
+    textFaint: "#aaa",
+    glued: "#eaf7ed",
+    gluedBorder: "#6abf7a",
+    navActive: "#1a3fa0",
+  };
+
   if (!loaded) return (
-    <div style={{ display:"flex", alignItems:"center", justifyContent:"center", height:"100vh", background:"#0a0a0f", color:"#fff", fontFamily:"monospace", fontSize:18 }}>
+    <div style={{ display:"flex", alignItems:"center", justifyContent:"center", height:"100vh", background:C.bg, color:C.text, fontFamily:"'Arial Black', Arial, sans-serif", fontSize:18 }}>
       Carregando álbum...
     </div>
   );
 
   return (
-    <div style={{ minHeight:"100vh", background:"#0a0a0f", color:"#e8e0d0", fontFamily:"'Georgia', serif" }}>
-      {/* HEADER */}
-      <div style={{ background:"linear-gradient(135deg,#1a0a00 0%,#2d1a00 50%,#1a0a00 100%)", borderBottom:"2px solid #C9A84C", padding:"16px 20px" }}>
-        <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:12 }}>
-          <div style={{ fontSize:32 }}>🏆</div>
-          <div>
-            <div style={{ fontSize:18, fontWeight:"bold", color:"#C9A84C", letterSpacing:2 }}>FIFA WORLD CUP 2026</div>
-            <div style={{ fontSize:11, color:"#a89060", letterSpacing:3, textTransform:"uppercase" }}>Álbum do Grupo</div>
+    <div style={{ minHeight:"100vh", background:C.bg, color:C.text, fontFamily:"Arial, sans-serif" }}>
+
+      {/* ── HEADER ── */}
+      <div style={{ background:"#fff", borderBottom:`3px solid ${C.accent}`, padding:"14px 20px", boxShadow:"0 2px 8px rgba(0,0,0,0.08)" }}>
+        <div style={{ maxWidth:960, margin:"0 auto" }}>
+          <div style={{ display:"flex", alignItems:"center", gap:14, marginBottom:10 }}>
+            <div style={{ background:C.accent, borderRadius:10, padding:"6px 10px" }}>
+              <span style={{ fontSize:28 }}>🏆</span>
+            </div>
+            <div style={{ flex:1 }}>
+              <div style={{ fontSize:20, fontWeight:900, color:C.text, letterSpacing:1, textTransform:"uppercase" }}>FIFA World Cup 2026</div>
+              <div style={{ fontSize:13, color:C.textSub, fontWeight:600 }}>Álbum do Grupo</div>
+            </div>
+            <div style={{ textAlign:"right" }}>
+              <div style={{ fontSize:28, fontWeight:900, color:C.accent }}>{pct}%</div>
+              <div style={{ fontSize:13, color:C.textSub }}>{totalGlued}/{TOTAL}</div>
+            </div>
           </div>
-          <div style={{ marginLeft:"auto", textAlign:"right" }}>
-            <div style={{ fontSize:22, fontWeight:"bold", color:"#C9A84C" }}>{pct}%</div>
-            <div style={{ fontSize:11, color:"#a89060" }}>{totalGlued}/{TOTAL}</div>
+          {/* Barra de progresso */}
+          <div style={{ background:"#eee", borderRadius:6, height:8, overflow:"hidden", marginBottom:10 }}>
+            <div style={{ width:`${pct}%`, height:"100%", background:`linear-gradient(90deg,${C.accent},${C.gold})`, borderRadius:6, transition:"width 0.4s ease" }} />
           </div>
-        </div>
-        {/* Progress bar */}
-        <div style={{ background:"#1a1200", borderRadius:4, height:6, overflow:"hidden" }}>
-          <div style={{ width:`${pct}%`, height:"100%", background:"linear-gradient(90deg,#C9A84C,#ffd700)", borderRadius:4, transition:"width 0.4s ease" }} />
-        </div>
-        {/* Stats row */}
-        <div style={{ display:"flex", gap:16, marginTop:10, fontSize:12 }}>
-          <span style={{ color:"#7ec87e" }}>✅ {totalGlued} coladas</span>
-          <span style={{ color:"#e07070" }}>❌ {totalMissing} faltando</span>
-          <span style={{ color:"#7ab8e8" }}>📦 {totalRepeats} repetidas</span>
+          {/* Stats */}
+          <div style={{ display:"flex", gap:20, fontSize:14, fontWeight:700 }}>
+            <span style={{ color:C.accentG }}>✅ {totalGlued} coladas</span>
+            <span style={{ color:C.accent }}>❌ {totalMissing} faltando</span>
+            <span style={{ color:C.accentB }}>📦 {totalRepeats} repetidas</span>
+          </div>
         </div>
       </div>
 
-      {/* NAV */}
-      <div style={{ display:"flex", borderBottom:"1px solid #2a2010", background:"#110d00", overflowX:"auto" }}>
-        {[["album","📖 Álbum"],["missing","❌ Faltando"],["repeats","📦 Repetidas"]].map(([v,l]) => (
-          <button key={v} onClick={() => setView(v)} style={{
-            padding:"10px 16px", border:"none", cursor:"pointer", fontSize:13, fontWeight:"bold",
-            background: view===v ? "#1a1200" : "transparent",
-            color: view===v ? "#C9A84C" : "#6a5a30",
-            borderBottom: view===v ? "2px solid #C9A84C" : "2px solid transparent",
-            whiteSpace:"nowrap", transition:"all 0.2s"
-          }}>{l}</button>
-        ))}
+      {/* ── NAV ── */}
+      <div style={{ background:"#fff", borderBottom:`1px solid ${C.border}`, display:"flex", overflowX:"auto" }}>
+        <div style={{ maxWidth:960, margin:"0 auto", display:"flex", width:"100%" }}>
+          {[["album","📖 Álbum"],["missing","❌ Faltando"],["repeats","📦 Repetidas"]].map(([v,l]) => (
+            <button key={v} onClick={() => setView(v)} style={{
+              padding:"14px 22px", border:"none", cursor:"pointer", fontSize:15, fontWeight:800,
+              background:"transparent",
+              color: view===v ? C.navActive : C.textSub,
+              borderBottom: view===v ? `3px solid ${C.navActive}` : "3px solid transparent",
+              whiteSpace:"nowrap", transition:"all 0.15s", textTransform:"uppercase", letterSpacing:0.5
+            }}>{l}</button>
+          ))}
+        </div>
       </div>
 
-      {/* CONTENT */}
-      <div style={{ padding:"16px", maxWidth:900, margin:"0 auto" }}>
+      {/* ── CONTENT ── */}
+      <div style={{ padding:"20px 16px", maxWidth:960, margin:"0 auto" }}>
 
-        {/* ── ALBUM VIEW ── */}
+        {/* ── ÁLBUM ── */}
         {view === "album" && (
           <>
             <input
-              value={search} onChange={e => setSearch(e.target.value)} placeholder="🔍 Buscar seleção ou figurinha..."
-              style={{ width:"100%", padding:"10px 14px", background:"#1a1200", border:"1px solid #3a2800", borderRadius:8, color:"#e8e0d0", fontSize:14, marginBottom:16, boxSizing:"border-box" }}
+              value={search} onChange={e => setSearch(e.target.value)}
+              placeholder="🔍 Buscar seleção ou figurinha..."
+              style={{ width:"100%", padding:"12px 16px", background:"#fff", border:`2px solid ${C.border}`, borderRadius:10, color:C.text, fontSize:15, marginBottom:18, boxSizing:"border-box", outline:"none" }}
             />
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(160px, 1fr))", gap:10 }}>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(170px, 1fr))", gap:12 }}>
               {filteredTeams.map(team => {
                 const total = team.stickers.length;
                 const done = team.stickers.filter(s => state.glued[s.id]).length;
-                const repeats = team.stickers.filter(s => state.repeats[s.id] > 0).reduce((a,s) => a + state.repeats[s.id], 0);
+                const rpts = team.stickers.filter(s => state.repeats[s.id] > 0).reduce((a,s) => a + state.repeats[s.id], 0);
                 const p = Math.round((done/total)*100);
+                const complete = done === total;
                 return (
                   <div key={team.id} onClick={() => { setActiveTeam(team.id); setView("team"); }}
-                    style={{ background:"#110d00", border:`1px solid ${done===total?"#C9A84C":"#2a2010"}`, borderRadius:10, padding:12, cursor:"pointer", transition:"all 0.2s" }}
+                    style={{
+                      background: complete ? "#fffbea" : C.card,
+                      border: `2px solid ${complete ? C.gold : C.border}`,
+                      borderRadius:12, padding:14, cursor:"pointer",
+                      transition:"all 0.15s", boxShadow:"0 1px 4px rgba(0,0,0,0.06)"
+                    }}
                   >
-                    <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:6 }}>
-                      <span style={{ fontSize:20 }}>{team.flag}</span>
+                    {/* Bandeira + Nome */}
+                    <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:10 }}>
+                      <FlagImg code={FLAG[team.id]} size={28} />
                       <div style={{ flex:1, minWidth:0 }}>
-                        <div style={{ fontSize:12, fontWeight:"bold", color: done===total?"#C9A84C":"#e8e0d0", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{team.name}</div>
-                        <div style={{ fontSize:10, color:"#6a5a30" }}>{team.id}</div>
+                        <div style={{ fontSize:14, fontWeight:800, color: complete ? C.gold : C.text, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{team.name}</div>
+                        <div style={{ fontSize:12, color:C.textFaint, fontWeight:600 }}>{team.id}</div>
                       </div>
                     </div>
-                    <div style={{ background:"#1a1200", borderRadius:3, height:4, marginBottom:6, overflow:"hidden" }}>
-                      <div style={{ width:`${p}%`, height:"100%", background: done===total?"#C9A84C":"#5a8a5a", borderRadius:3 }} />
+                    {/* Barra */}
+                    <div style={{ background:"#eee", borderRadius:4, height:5, marginBottom:8, overflow:"hidden" }}>
+                      <div style={{ width:`${p}%`, height:"100%", background: complete ? C.gold : C.accentG, borderRadius:4 }} />
                     </div>
-                    <div style={{ display:"flex", justifyContent:"space-between", fontSize:11 }}>
-                      <span style={{ color:"#7ec87e" }}>{done}/{total}</span>
-                      {repeats > 0 && <span style={{ color:"#7ab8e8" }}>📦{repeats}</span>}
+                    {/* Contadores */}
+                    <div style={{ display:"flex", justifyContent:"space-between", fontSize:13, fontWeight:700 }}>
+                      <span style={{ color:C.accentG }}>{done}/{total}</span>
+                      {rpts > 0 && <span style={{ color:C.accentB }}>📦 {rpts}</span>}
                     </div>
                   </div>
                 );
@@ -603,40 +661,45 @@ export default function App() {
           </>
         )}
 
-        {/* ── TEAM VIEW ── */}
+        {/* ── SELEÇÃO ── */}
         {view === "team" && activeTeam && (() => {
           const team = TEAMS.find(t => t.id === activeTeam);
           if (!team) return null;
           const done = team.stickers.filter(s => state.glued[s.id]).length;
           return (
             <>
-              <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:16 }}>
-                <button onClick={() => setView("album")} style={{ background:"#2a1a00", border:"1px solid #3a2800", borderRadius:6, color:"#C9A84C", padding:"6px 12px", cursor:"pointer", fontSize:13 }}>← Voltar</button>
-                <span style={{ fontSize:24 }}>{team.flag}</span>
+              <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:18, background:"#fff", borderRadius:12, padding:"12px 16px", boxShadow:"0 1px 4px rgba(0,0,0,0.06)" }}>
+                <button onClick={() => setView("album")} style={{ background:C.accentB, border:"none", borderRadius:8, color:"#fff", padding:"8px 16px", cursor:"pointer", fontSize:14, fontWeight:700 }}>← Voltar</button>
+                <FlagImg code={FLAG[team.id]} size={32} />
                 <div>
-                  <div style={{ fontSize:16, fontWeight:"bold", color:"#C9A84C" }}>{team.name}</div>
-                  <div style={{ fontSize:12, color:"#6a5a30" }}>{done}/{team.stickers.length} coladas</div>
+                  <div style={{ fontSize:18, fontWeight:900, color:C.text }}>{team.name}</div>
+                  <div style={{ fontSize:13, color:C.textSub, fontWeight:600 }}>{done}/{team.stickers.length} coladas</div>
                 </div>
               </div>
-              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(130px, 1fr))", gap:8 }}>
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(140px, 1fr))", gap:10 }}>
                 {team.stickers.map(s => {
                   const isGlued = !!state.glued[s.id];
                   const rpt = state.repeats[s.id] || 0;
                   return (
-                    <div key={s.id} style={{ background: isGlued?"#0d1a0d":"#110d00", border:`1px solid ${isGlued?"#3a6a3a":"#2a2010"}`, borderRadius:8, padding:10, position:"relative" }}>
-                      {s.foil && <span style={{ position:"absolute", top:4, right:4, fontSize:10, background:"#3a2800", color:"#C9A84C", borderRadius:3, padding:"1px 4px" }}>FOIL</span>}
-                      <div style={{ fontSize:11, fontWeight:"bold", color:"#C9A84C", marginBottom:2 }}>{s.id}</div>
-                      <div style={{ fontSize:11, color:"#b0a080", marginBottom:8, lineHeight:1.3 }}>{s.name}</div>
+                    <div key={s.id} style={{
+                      background: isGlued ? C.glued : C.card,
+                      border: `2px solid ${isGlued ? C.gluedBorder : C.border}`,
+                      borderRadius:10, padding:10, position:"relative",
+                      boxShadow:"0 1px 3px rgba(0,0,0,0.05)"
+                    }}>
+                      {s.foil && <span style={{ position:"absolute", top:5, right:5, fontSize:10, background:C.gold, color:"#fff", borderRadius:3, padding:"1px 5px", fontWeight:700 }}>FOIL</span>}
+                      <div style={{ fontSize:13, fontWeight:800, color:C.accent, marginBottom:2 }}>{s.id}</div>
+                      <div style={{ fontSize:12, color:C.textSub, marginBottom:10, lineHeight:1.4, minHeight:32 }}>{s.name}</div>
                       <button onClick={() => toggleGlued(s.id)} style={{
-                        width:"100%", padding:"5px 0", border:"none", borderRadius:5, cursor:"pointer", fontSize:12, fontWeight:"bold",
-                        background: isGlued?"#1a4a1a":"#2a1a00", color: isGlued?"#7ec87e":"#C9A84C",
-                        marginBottom:6, transition:"all 0.2s"
-                      }}>{isGlued ? "✅ Colada" : "⬜ Colar"}</button>
-                      <div style={{ display:"flex", alignItems:"center", gap:4 }}>
-                        <span style={{ fontSize:10, color:"#6a5a30" }}>📦</span>
-                        <button onClick={() => setRepeats(s.id, rpt-1)} style={{ background:"#2a1a00", border:"1px solid #3a2800", color:"#C9A84C", width:22, height:22, borderRadius:4, cursor:"pointer", fontSize:14, lineHeight:1 }}>−</button>
-                        <span style={{ fontSize:13, color: rpt>0?"#7ab8e8":"#3a3020", minWidth:16, textAlign:"center" }}>{rpt}</span>
-                        <button onClick={() => setRepeats(s.id, rpt+1)} style={{ background:"#2a1a00", border:"1px solid #3a2800", color:"#C9A84C", width:22, height:22, borderRadius:4, cursor:"pointer", fontSize:14, lineHeight:1 }}>+</button>
+                        width:"100%", padding:"6px 0", border:"none", borderRadius:6, cursor:"pointer", fontSize:13, fontWeight:800,
+                        background: isGlued ? C.accentG : C.accentB,
+                        color:"#fff", marginBottom:8, transition:"all 0.15s"
+                      }}>{isGlued ? "✅ Colada" : "Colar"}</button>
+                      <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:6 }}>
+                        <span style={{ fontSize:12, color:C.textFaint }}>📦</span>
+                        <button onClick={() => setRepeats(s.id, rpt-1)} style={{ background:"#eee", border:"none", color:C.text, width:24, height:24, borderRadius:5, cursor:"pointer", fontSize:15, fontWeight:700, lineHeight:1 }}>−</button>
+                        <span style={{ fontSize:14, fontWeight:800, color: rpt>0 ? C.accentB : C.textFaint, minWidth:18, textAlign:"center" }}>{rpt}</span>
+                        <button onClick={() => setRepeats(s.id, rpt+1)} style={{ background:"#eee", border:"none", color:C.text, width:24, height:24, borderRadius:5, cursor:"pointer", fontSize:15, fontWeight:700, lineHeight:1 }}>+</button>
                       </div>
                     </div>
                   );
@@ -646,25 +709,25 @@ export default function App() {
           );
         })()}
 
-        {/* ── MISSING VIEW ── */}
+        {/* ── FALTANDO ── */}
         {view === "missing" && (
           <>
-            <div style={{ fontSize:14, color:"#a89060", marginBottom:12 }}>❌ <strong style={{ color:"#e8e0d0" }}>{allMissing.length}</strong> figurinhas faltando para completar o álbum</div>
+            <div style={{ fontSize:15, color:C.textSub, marginBottom:16 }}>❌ <strong style={{ color:C.text }}>{allMissing.length}</strong> figurinhas faltando</div>
             {TEAMS.filter(t => t.stickers.some(s => !state.glued[s.id])).map(team => {
               const missing = team.stickers.filter(s => !state.glued[s.id]);
               return (
-                <div key={team.id} style={{ marginBottom:16 }}>
-                  <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:6 }}>
-                    <span>{team.flag}</span>
-                    <span style={{ fontSize:13, fontWeight:"bold", color:"#C9A84C" }}>{team.name}</span>
-                    <span style={{ fontSize:11, color:"#6a5a30" }}>({missing.length} faltando)</span>
+                <div key={team.id} style={{ marginBottom:18, background:C.card, borderRadius:12, padding:"12px 14px", boxShadow:"0 1px 4px rgba(0,0,0,0.05)" }}>
+                  <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:10 }}>
+                    <FlagImg code={FLAG[team.id]} size={22} />
+                    <span style={{ fontSize:15, fontWeight:800, color:C.text }}>{team.name}</span>
+                    <span style={{ fontSize:13, color:C.textFaint, fontWeight:600 }}>({missing.length} faltando)</span>
                   </div>
                   <div style={{ display:"flex", flexWrap:"wrap", gap:6 }}>
                     {missing.map(s => (
                       <button key={s.id} onClick={() => toggleGlued(s.id)} style={{
-                        padding:"4px 8px", background:"#1a0800", border:"1px solid #3a2000", borderRadius:5,
-                        color:"#e8d0a0", fontSize:12, cursor:"pointer"
-                      }} title={s.name}>{s.id} <span style={{ fontSize:10, color:"#6a5030" }}>{s.name}</span></button>
+                        padding:"5px 10px", background:C.bg, border:`1px solid ${C.border}`, borderRadius:6,
+                        color:C.text, fontSize:13, fontWeight:700, cursor:"pointer"
+                      }} title={s.name}>{s.id} <span style={{ fontSize:11, color:C.textFaint, fontWeight:400 }}>{s.name}</span></button>
                     ))}
                   </div>
                 </div>
@@ -673,28 +736,28 @@ export default function App() {
           </>
         )}
 
-        {/* ── REPEATS VIEW ── */}
+        {/* ── REPETIDAS ── */}
         {view === "repeats" && (
           <>
-            <div style={{ fontSize:14, color:"#a89060", marginBottom:12 }}>📦 <strong style={{ color:"#e8e0d0" }}>{allRepeats.length}</strong> tipos de figurinha repetida · <strong style={{ color:"#e8e0d0" }}>{totalRepeats}</strong> figurinhas no total</div>
+            <div style={{ fontSize:15, color:C.textSub, marginBottom:16 }}>📦 <strong style={{ color:C.text }}>{allRepeats.length}</strong> tipos · <strong style={{ color:C.text }}>{totalRepeats}</strong> figurinhas no total</div>
             {allRepeats.length === 0 ? (
-              <div style={{ color:"#3a3020", textAlign:"center", padding:40, fontSize:14 }}>Nenhuma repetida registrada ainda.</div>
+              <div style={{ color:C.textFaint, textAlign:"center", padding:48, fontSize:15, background:C.card, borderRadius:12 }}>Nenhuma repetida registrada ainda.</div>
             ) : (
               TEAMS.filter(t => t.stickers.some(s => state.repeats[s.id] > 0)).map(team => {
                 const rpts = team.stickers.filter(s => state.repeats[s.id] > 0);
                 return (
-                  <div key={team.id} style={{ marginBottom:16 }}>
-                    <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:6 }}>
-                      <span>{team.flag}</span>
-                      <span style={{ fontSize:13, fontWeight:"bold", color:"#C9A84C" }}>{team.name}</span>
+                  <div key={team.id} style={{ marginBottom:18, background:C.card, borderRadius:12, padding:"12px 14px", boxShadow:"0 1px 4px rgba(0,0,0,0.05)" }}>
+                    <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:10 }}>
+                      <FlagImg code={FLAG[team.id]} size={22} />
+                      <span style={{ fontSize:15, fontWeight:800, color:C.text }}>{team.name}</span>
                     </div>
                     <div style={{ display:"flex", flexWrap:"wrap", gap:6 }}>
                       {rpts.map(s => (
-                        <div key={s.id} style={{ padding:"4px 10px", background:"#001830", border:"1px solid #002a50", borderRadius:5, display:"flex", alignItems:"center", gap:6 }}>
-                          <span style={{ fontSize:12, color:"#7ab8e8", fontWeight:"bold" }}>{s.id}</span>
-                          <span style={{ fontSize:10, color:"#4a6a90" }}>{s.name}</span>
-                          <span style={{ fontSize:13, color:"#fff", background:"#003060", borderRadius:3, padding:"1px 6px", fontWeight:"bold" }}>×{state.repeats[s.id]}</span>
-                          <button onClick={() => setRepeats(s.id, state.repeats[s.id]-1)} style={{ background:"transparent", border:"none", color:"#7ab8e8", cursor:"pointer", fontSize:16, lineHeight:1, padding:0 }}>−</button>
+                        <div key={s.id} style={{ padding:"5px 10px", background:"#e8f0fe", border:`1px solid #b8cdf8`, borderRadius:6, display:"flex", alignItems:"center", gap:6 }}>
+                          <span style={{ fontSize:13, color:C.accentB, fontWeight:800 }}>{s.id}</span>
+                          <span style={{ fontSize:11, color:C.textSub }}>{s.name}</span>
+                          <span style={{ fontSize:14, color:"#fff", background:C.accentB, borderRadius:4, padding:"1px 8px", fontWeight:800 }}>×{state.repeats[s.id]}</span>
+                          <button onClick={() => setRepeats(s.id, state.repeats[s.id]-1)} style={{ background:"transparent", border:"none", color:C.accentB, cursor:"pointer", fontSize:18, fontWeight:700, lineHeight:1, padding:0 }}>−</button>
                         </div>
                       ))}
                     </div>
@@ -706,12 +769,13 @@ export default function App() {
         )}
       </div>
 
-      {/* TOAST */}
+      {/* ── TOAST ── */}
       {toast && (
         <div style={{
           position:"fixed", bottom:24, left:"50%", transform:"translateX(-50%)",
-          background:"#1a4a1a", border:"1px solid #3a7a3a", borderRadius:8, padding:"10px 20px",
-          color:"#7ec87e", fontSize:14, fontWeight:"bold", zIndex:999, pointerEvents:"none"
+          background:C.accentG, borderRadius:10, padding:"12px 24px",
+          color:"#fff", fontSize:15, fontWeight:800, zIndex:999, pointerEvents:"none",
+          boxShadow:"0 4px 16px rgba(0,0,0,0.15)"
         }}>{toast}</div>
       )}
     </div>
