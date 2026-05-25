@@ -474,14 +474,16 @@ const FLAG = {
 };
 
 const FlagImg = ({ code, size = 32 }) => {
-  if (!code) return <span style={{ fontSize: size * 0.7, lineHeight: 1 }}>🏆</span>;
+  if (!code) return <span style={{ fontSize: size * 0.8, lineHeight: 1 }}>🏆</span>;
+  // Converte código para maiúsculo para a API do flagsapi.com
+  const upper = code.replace("gb-sct", "GB").replace("gb-eng", "GB").toUpperCase();
   return (
     <img
-      src={`https://flagcdn.com/w${size * 2}/${code}.png`}
+      src={`https://flagsapi.com/${upper}/flat/64.png`}
       width={size * 1.4}
       height={size}
-      style={{ objectFit:"cover", borderRadius:3, border:"1px solid #3a2800" }}
-      alt={code}
+      style={{ objectFit:"contain", borderRadius:3 }}
+      alt={upper}
       onError={e => { e.target.style.display = "none"; }}
     />
   );
